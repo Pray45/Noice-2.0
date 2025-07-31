@@ -68,9 +68,21 @@ export default function VerifyEmailPage() {
         localStorage.removeItem('auth_email')
         router.push('/home')
       }
-    } catch (error: any) {
-      console.log('Verification error:', error)
+    } catch (err) {
+      console.log('Verification error:', err)
       
+      interface ErrorResponse {
+        response?: {
+          data?: {
+            message?: string;
+            error?: string;
+          };
+          status?: number;
+        };
+        message?: string;
+      }
+      
+      const error = err as ErrorResponse
     
       let errorMessage = 'Verification failed'
       

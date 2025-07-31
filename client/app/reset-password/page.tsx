@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { api } from '@/lib/axios'
 import toast from 'react-hot-toast'
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -42,8 +42,21 @@ export default function ResetPasswordPage() {
       })
       toast.success('Password reset successful')
       router.push('/home')
-    } catch (error: any) {
-      console.log('Reset password error:', error)
+    } catch (err) {
+      console.log('Reset password error:', err)
+      
+      interface ErrorResponse {
+        response?: {
+          data?: {
+            message?: string;
+            error?: string;
+          };
+          status?: number;
+        };
+        message?: string;
+      }
+      
+      const error = err as ErrorResponse
       
       let errorMessage = 'Reset failed'
       
@@ -100,7 +113,9 @@ export default function ResetPasswordPage() {
                     maxLength={1}
                     value={digit}
                     onChange={(e) => handleOtpChange(idx, e.target.value)}
-                    ref={(el) => (inputRefs.current[idx] = el)}
+                    ref={(el) => {
+                      inputRefs.current[idx] = el
+                    }}
                     className="w-10 h-12 sm:w-12 sm:h-14 text-center text-xl sm:text-2xl rounded-lg bg-gray-800/80 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   />
                 ))}
@@ -151,5 +166,28 @@ export default function ResetPasswordPage() {
         </form>
       </div>
     </main>
+  )
+}
+
+function LoadingFallback() {
+  return (
+    <main className="min-h-screen flex items-center justify-center px-4 py-8 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
+      <div className="w-full max-w-md">
+        <div className="bg-gray-900/80 backdrop-blur-sm border border-gray-700 p-6 sm:p-8 rounded-xl shadow-2xl">
+          <div className="text-center">
+            <div className="w-8 h-8 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-gray-400">Loading...</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  )
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <ResetPasswordForm />
+    </Suspense>
   )
 }

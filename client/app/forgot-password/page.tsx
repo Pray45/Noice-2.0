@@ -17,8 +17,21 @@ export default function ForgotPasswordPage() {
       await api.post('/auth/forgot-password', { email })
       toast.success('OTP sent to your email')
       router.push(`/reset-password?email=${encodeURIComponent(email)}`)
-    } catch (error: any) {
-      console.log('Forgot password error:', error)
+    } catch (err) {
+      console.log('Forgot password error:', err)
+      
+      interface ErrorResponse {
+        response?: {
+          data?: {
+            message?: string;
+            error?: string;
+          };
+          status?: number;
+        };
+        message?: string;
+      }
+      
+      const error = err as ErrorResponse
       
       let errorMessage = 'Failed to send OTP'
       

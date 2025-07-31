@@ -32,9 +32,21 @@ export default function LoginPage() {
         toast.success('Login successful!')
         router.push('/home')
       }
-    } catch (error: any) {
-      console.log('Login error:', error)
+    } catch (err) {
+      console.log('Login error:', err)
       
+      interface ErrorResponse {
+        response?: {
+          data?: {
+            message?: string;
+            error?: string;
+          };
+          status?: number;
+        };
+        message?: string;
+      }
+      
+      const error = err as ErrorResponse
 
       let errorMessage = 'Login failed'
       
