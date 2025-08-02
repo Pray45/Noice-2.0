@@ -98,7 +98,7 @@ function ResetPasswordForm() {
           className="bg-gray-900/80 backdrop-blur-sm border border-gray-700 p-6 sm:p-8 rounded-xl shadow-2xl space-y-6"
         >
           <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Reset Your Nimbus Password</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Reset Your Noice Password</h1>
             <p className="text-gray-400 text-sm">Enter the OTP and your new password</p>
           </div>
 

@@ -101,8 +101,8 @@ export default function RegisterPage() {
             transition={{ duration: 0.3, delay: 0.15 }}
             className="text-center"
           >
-            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Create Your Nimbus Account</h1>
-            <p className="text-gray-400 text-sm">Join Nimbus to get started</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Create Your Noice Account</h1>
+            <p className="text-gray-400 text-sm">Join Noice to get started</p>
           </motion.div>
 
           <div className="space-y-4">

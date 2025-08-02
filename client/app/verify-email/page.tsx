@@ -124,7 +124,7 @@ export default function VerifyEmailPage() {
           >
             <div className="mb-4">
               <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">Verify Your Email</h1>
-              <p className="text-blue-400 text-sm font-medium">Nimbus Authentication</p>
+              <p className="text-blue-400 text-sm font-medium">Noice Authentication</p>
             </div>
             <p className="text-gray-400 text-sm">Enter the 6-digit code sent to</p>
             <p className="text-blue-400 text-sm font-medium">{email}</p>

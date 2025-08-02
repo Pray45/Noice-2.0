@@ -101,7 +101,7 @@ export default function LoginPage() {
             transition={{ duration: 0.3, delay: 0.15 }}
             className="text-center"
           >
-            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Welcome Back to Nimbus</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Welcome Back to Noice</h1>
             <p className="text-gray-400 text-sm">Sign in to your account</p>
           </motion.div>
 

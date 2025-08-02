@@ -17,7 +17,7 @@ export const sendOTPEmail = async (email, otp) => {
       
       <!-- Header -->
       <div style="background:#0f172a; color:#ffffff; padding:32px 24px; text-align:center;">
-        <h1 style="margin:0; font-size:24px;">NIMBUS</h1>
+        <h1 style="margin:0; font-size:24px;">NOICE</h1>
       </div>
 
       <!-- Content -->
@@ -34,13 +34,13 @@ export const sendOTPEmail = async (email, otp) => {
         <div style="font-size:14px; color:#64748b; margin-bottom:32px;">This code is valid for the next 5 minutes.</div>
 
         <div style="background:#fff0f1; color:#b91c1c; padding:16px; border-left:4px solid #dc2626; font-size:14px; line-height:1.6; margin-bottom:32px; text-align:left; border-radius:4px;">
-          <strong>Security Tip:</strong> Do not share this OTP with anyone. Nimbus will never ask for your OTP via call, email, or message. If you didn’t request this, you can safely ignore this message.
+          <strong>Security Tip:</strong> Do not share this OTP with anyone. Noice will never ask for your OTP via call, email, or message. If you didn’t request this, you can safely ignore this message.
         </div>
       </div>
 
       <!-- Footer -->
       <div style="background:#f8fafc; padding:24px; font-size:13px; text-align:center; color:#64748b; border-top:1px solid #e2e8f0;">
-        This email was sent to ${email} by Nimbus Authentication System.<br/>
+        This email was sent to ${email} by Noice Authentication System.<br/>
         <a href="#" style="color:#3b82f6; text-decoration:none; margin:0 12px;">Help</a> | 
         <a href="#" style="color:#3b82f6; text-decoration:none; margin:0 12px;">Privacy</a> | 
         <a href="#" style="color:#3b82f6; text-decoration:none; margin:0 12px;">Terms</a>
@@ -51,9 +51,9 @@ export const sendOTPEmail = async (email, otp) => {
 `;
 
   const mailOptions = {
-    from: `Nimbus Security <${process.env.MAIL_USER}>`,
+    from: `Noice Security <${process.env.MAIL_USER}>`,
     to: email,
-    subject: 'Your Nimbus Verification Code',
+    subject: 'Your Noice Verification Code',
     html: htmlTemplate,
   };
 

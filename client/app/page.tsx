@@ -25,7 +25,7 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white"
             >
-              Welcome to <span className="text-blue-400">Nimbus</span>
+              Welcome to <span className="text-blue-400">Noice</span>
             </motion.h1>
             <motion.p 
               initial={{ y: 20, opacity: 0 }}

@@ -18,7 +18,7 @@
   "devDependencies": {
     "nodemon": "^3.1.10"
   },
-  "name": "nimbus",
+  "name": "noice",
   "version": "1.0.0",
   "main": "server.js",
   "type": "module",
