@@ -6,34 +6,31 @@ import { motion } from 'framer-motion'
 import { api } from '@/lib/axios'
 import toast from 'react-hot-toast'
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter()
-  const [form, setForm] = useState({ email: '', password: '' })
-  const [loading, setLoading] = useState(false)
+  const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' })
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
+    
+    // Validate password confirmation
+    if (form.password !== form.confirmPassword) {
+      toast.error('Passwords do not match')
+      return
+    }
+    
+    setIsLoading(true)
     try {
-      const response = await api.post('/auth/login', form) 
-      
-      if (response.data.token || response.data.accessToken) {
-        const token = response.data.token || response.data.accessToken
-        localStorage.setItem('auth_token', token)
-        
-
-        if (response.data.user) {
-          localStorage.setItem('user_data', JSON.stringify(response.data.user))
-        }
-        
-        toast.success('Login successful!')
-        router.push('/home')
-      } else {
-        toast.success('Login successful!')
-        router.push('/home')
-      }
+      // Send only required fields to backend
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { confirmPassword, ...registerData } = form
+      await api.post('/auth/register', registerData)
+      toast.success('Registration successful. Check your email for OTP.')
+      localStorage.setItem('auth_email', form.email)
+      router.push('/verify-email')
     } catch (err) {
-      console.log('Login error:', err)
+      console.log('Registration error:', err)
       
       interface ErrorResponse {
         response?: {
@@ -47,36 +44,39 @@ export default function LoginPage() {
       }
       
       const error = err as ErrorResponse
+      
 
-      let errorMessage = 'Login failed'
+      let errorMessage = 'Registration failed'
       
       if (error?.response?.data?.message) {
         errorMessage = error.response.data.message
       } else if (error?.response?.data?.error) {
         errorMessage = error.response.data.error
       } else if (error?.response?.data) {
-        errorMessage = typeof error.response.data === 'string' ? error.response.data : 'Login failed'
+
+        errorMessage = typeof error.response.data === 'string' ? error.response.data : 'Registration failed'
       } else if (error?.message) {
         errorMessage = error.message
       } else if (error?.response?.status) {
+
         switch (error.response.status) {
-          case 401:
-            errorMessage = 'Invalid email or password'
+          case 400:
+            errorMessage = 'Invalid registration data'
             break
-          case 404:
-            errorMessage = 'User not found'
+          case 409:
+            errorMessage = 'User already exists'
             break
           case 500:
             errorMessage = 'Server error. Please try again later.'
             break
           default:
-            errorMessage = 'Login failed'
+            errorMessage = 'Registration failed'
         }
       }
       
       toast.error(errorMessage)
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
@@ -101,8 +101,8 @@ export default function LoginPage() {
             transition={{ duration: 0.3, delay: 0.15 }}
             className="text-center"
           >
-            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Welcome Back to Noice</h1>
-            <p className="text-gray-400 text-sm">Sign in to your account</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Create Your Noice Account</h1>
+            <p className="text-gray-400 text-sm">Join Noice to get started</p>
           </motion.div>
 
           <div className="space-y-4">
@@ -110,6 +110,21 @@ export default function LoginPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3, delay: 0.2 }}
+            >
+              <input
+                type="text"
+                placeholder="Full Name"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                className="w-full p-3 sm:p-4 rounded-lg bg-gray-800/80 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 focus:scale-[1.01]"
+                required
+              />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.25 }}
             >
               <input
                 type="email"
@@ -124,13 +139,30 @@ export default function LoginPage() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.3, delay: 0.25 }}
+              transition={{ duration: 0.3, delay: 0.3 }}
             >
               <input
                 type="password"
                 placeholder="Password"
                 value={form.password}
+                minLength={6}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
+                className="w-full p-3 sm:p-4 rounded-lg bg-gray-800/80 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 focus:scale-[1.01]"
+                required
+              />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.35 }}
+            >
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                value={form.confirmPassword}
+                minLength={6}
+                onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
                 className="w-full p-3 sm:p-4 rounded-lg bg-gray-800/80 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 focus:scale-[1.01]"
                 required
               />
@@ -140,42 +172,36 @@ export default function LoginPage() {
           <motion.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.3, delay: 0.3 }}
+            transition={{ duration: 0.3, delay: 0.4 }}
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.99 }}
             type="submit"
-            disabled={loading}
+            disabled={isLoading}
             className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-semibold p-3 sm:p-4 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:cursor-not-allowed transition-colors duration-150"
           >
-            {loading ? (
+            {isLoading ? (
               <div className="flex items-center justify-center gap-3">
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                <span>Signing in...</span>
+                <span>Creating Account...</span>
               </div>
             ) : (
-              'Sign In'
+              'Create Account'
             )}
           </motion.button>
 
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.3, delay: 0.35 }}
-            className="text-center space-y-2"
+            transition={{ duration: 0.3, delay: 0.45 }}
+            className="text-center"
           >
-            <a 
-              href="/forgot-password" 
-              className="block text-blue-400 hover:text-blue-300 text-sm transition-colors duration-200"
-            >
-              Forgot your password?
-            </a>
             <p className="text-gray-400 text-sm">
-              Don&apos;t have an account?{' '}
+              Already have an account?{' '}
               <a 
-                href="/register" 
+                href="/login" 
                 className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
               >
-                Sign up
+                Sign in
               </a>
             </p>
           </motion.div>

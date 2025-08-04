@@ -9,11 +9,12 @@ import authRouter from './routes/auth.routes.js'
 
 dotenv.config()
 const app = express()
+const allowedOrigins = process.env.CLIENT_URL?.split(",") || [];
 
 dbConnect()
 
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: allowedOrigins,
   credentials: true,
 }));
 
