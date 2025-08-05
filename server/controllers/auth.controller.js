@@ -15,17 +15,7 @@ import jwt from "jsonwebtoken"
 
 export const registerUser = async (req, res) => {
 
-  const zodData = registerSchema.safeParse(req.body)
-
-  if (!zodData.success) {
-    return res.status(400).json({
-      success: false,
-      message: "Error in data validation with Zod.",
-      issues: zodData.error.errors,
-    })
-  }
-
-  const { name, email, password } = zodData.data
+  const { name, email, password } = req.body
 
   const existingUser = await User.findOne({ email })
 
@@ -77,17 +67,8 @@ export const validateOTP = async (email, otp) => {
 
 
 export const loginUser = async (req, res) => {
-  const zodData = loginSchema.safeParse(req.body)
 
-  if (!zodData.success) {
-    return res.status(400).json({
-      success: false,
-      message: "Validation failed.",
-      issues: zodData.error.errors,
-    })
-  }
-
-  const { email, password } = zodData.data
+  const { email, password } = req.body
 
   const user = await User.findOne({ email })
 
@@ -173,10 +154,6 @@ export const updateUser = async (req, res) => {
     const updateData = {}
     if (name) updateData.name = name
     if (avatar) updateData.avatar = avatar
-    if (password) {
-      const salt = await bcrypt.genSalt(10)
-      updateData.password = await bcrypt.hash(password, salt)
-    }
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
