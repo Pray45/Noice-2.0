@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const api = axios.create({
-  baseURL: 'https://nopice2-0.onrender.com/api',
+  baseURL: 'https://nopice2-0.onrender.com/api', 
   withCredentials: true,
 })
 

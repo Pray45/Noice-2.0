@@ -7,6 +7,7 @@ const otpSchema = mongoose.Schema({
     userData: { type: Object, default: null }, 
     createdAt: { type: Date, default: Date.now, expires: 300 },
     
+    
 }, { timestamps: true });
 
 const OTP = mongoose.model("OTP", otpSchema);
